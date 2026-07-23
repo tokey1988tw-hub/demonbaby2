@@ -204,6 +204,11 @@
         if (n > 0) console.log(`[修改器] 已重新注入 ${n} 件自訂防具/飾品到 DB.items`);
     })();
 
+    // 🔁 重拔完成後立即重算數值：DB.items 補回自訂武器/裝備定義前，遊戲開機時已跑過一次 calcStats()，
+    //    若已裝備的自訂物品當時查不到定義，其屬性/特效（含自動魔法 spellProc）就完全沒被算進當下的角色數值，
+    //    要等到下一次自然觸發重算（升級、重新裝備等）才會生效。這裡補一次立即重算，修正「開修改器後魔法沒套入」。
+    try { if (typeof calcStats === 'function') calcStats(); } catch (e) { console.warn('[修改器] 重拔後重算數值失敗', e); }
+
     // ===== 1d. 妖精全屬性魔法解鎖（C 方案：拔除 DB.skills 的 reqEle/reqEleAny）=====
     // 原理：屬性檢查全是 `sk.reqEle && elfEle !== sk.reqEle`，把 reqEle 設為 undefined → 整段 falsy 跳過，
     // 屬性限制失效；但等級(needLv)、MP、是否已學完全不受影響（仍須符合）。
