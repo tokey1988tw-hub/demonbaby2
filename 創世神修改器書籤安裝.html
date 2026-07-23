@@ -16,15 +16,6 @@
     h1 { font-size: 20px; color: #38bdf8; margin: 0 0 6px; }
     h2 { font-size: 15px; color: #4ade80; margin: 28px 0 10px; border-left: 3px solid #4ade80; padding-left: 8px; }
     p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; }
-    .card {
-        background: #1e293b; border: 1px solid #334155; border-radius: 10px;
-        padding: 16px; margin-bottom: 14px;
-    }
-    label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
-    input[type=text] {
-        width: 100%; background: #020617; color: #fde68a; border: 1px solid #475569;
-        border-radius: 6px; padding: 8px 10px; font-size: 13px; font-family: monospace;
-    }
     .bkmk-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
     a.bkmk {
         display: inline-block; background: #2563eb; color: #fff; text-decoration: none;
@@ -34,102 +25,17 @@
     }
     a.bkmk:active { cursor: grabbing; }
     .hint { font-size: 12px; color: #64748b; }
-    textarea#code-box {
-        width: 100%; height: 90px; background: #020617; color: #86efac;
-        border: 1px solid #475569; border-radius: 6px; padding: 8px; font-size: 11px;
-        font-family: monospace; resize: vertical;
-    }
-    button.copy {
-        background: #16a34a; color: #fff; border: none; padding: 8px 16px;
-        border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-top: 8px;
-    }
-    button.copy:active { background: #15803d; }
-    .status { font-size: 12px; color: #4ade80; margin-left: 8px; }
-    ol { padding-left: 20px; font-size: 13px; color: #cbd5e1; }
-    li { margin-bottom: 4px; }
-    .warn { color: #fbbf24; }
-    .step-title { font-weight: bold; color: #f1f5f9; }
 </style>
 </head>
 <body>
 <div class="wrap">
-    <h1>🛠️ 修改器 — 快速加入書籤</h1>
-    <p class="sub">私人使用：把下面的按鈕拖到書籤列，之後在遊戲頁面點一下書籤即可開啟修改器面板，不需要再開 F12 貼程式碼。</p>
+    <h1>🛠️ 創世神修改器書籤</h1>
+    <p class="sub">把下面的按鈕拖到書籤列，之後在遊戲頁面點一下書籤即可開啟修改器面板。</p>
 
-    <div class="card">
-        <label>① 你的修改器 <code>geo-mod.js</code> 部署網址（改成你實際上傳的位置，例如 GitHub Pages）：</label>
-        <input type="text" id="host-input" value="https://tokey1988tw-hub.github.io/demonbaby2/geo-mod.js">
-        <div class="hint" style="margin-top:6px;">⚠️ 這個網址必須是<span class="warn">公開可存取</span>的 .js 檔案原始位置（GitHub Pages 沒問題；GitHub 一般網頁版網址不行，要用 raw / Pages）。修改書籤網址後，下面的拖曳按鈕與貼上程式碼會自動更新。</div>
-    </div>
-
-    <h2>💻 電腦（Chrome / Edge）拖曳安裝</h2>
     <div class="bkmk-row">
-        <a class="bkmk" id="bkmk-link" href="#" onclick="return false;">🛠️ 拖我到書籤列（開啟修改器）</a>
+        <a class="bkmk" id="bkmk-link" href="javascript:(function(){var o=document.getElementById('geo-mod-loader');if(o)o.remove();var s=document.createElement('script');s.id='geo-mod-loader';s.src='https://tokey1988tw-hub.github.io/demonbaby2/geo-mod.js?t='+Date.now();document.body.appendChild(s);})();">🛠️ 拖我到書籤列（開啟修改器）</a>
     </div>
-    <div class="hint">找不到書籤列？先按 <b>Ctrl+Shift+B</b>（Mac：⌘+Shift+B）顯示書籤列，再把上面按鈕拖過去。</div>
-
-    <h2>📱 手機（iPhone / Android）貼上安裝</h2>
-    <ol>
-        <li><span class="step-title">STEP 1</span>：先在瀏覽器中任意加入一個書籤（例如把目前這頁加入書籤）。</li>
-        <li><span class="step-title">STEP 2</span>：編輯這個書籤，把「網址」欄位整個換成下面的程式碼。</li>
-        <li><span class="step-title">STEP 3</span>：儲存，之後在遊戲頁面點這個書籤即可開啟修改器。</li>
-    </ol>
-    <div class="card">
-        <textarea id="code-box" readonly></textarea>
-        <button class="copy" id="copy-btn">📋 複製書籤程式碼</button>
-        <span class="status" id="copy-status"></span>
-    </div>
-
-    <h2>ℹ️ 這個書籤在做什麼</h2>
-    <p style="font-size:13px; color:#cbd5e1;">
-        點擊後會在目前頁面插入一支外部腳本（來源＝上面填的網址，並附加時間戳參數避免吃到瀏覽器/CDN 快取的舊版），
-        由該腳本自行檢查目前頁面是否已進入遊戲（偵測 <code>DB</code>/<code>player</code> 是否存在），
-        沒偵測到會直接跳出提示，不會做任何事；偵測到才會建立/重建修改器浮動面板。
-        重複點擊書籤會先移除舊面板再重建，不會疊出多個面板。
-        不會修改網站本身，也不會影響其他人看到的畫面，純粹是你瀏覽器端的動作。
-    </p>
-    <p class="hint">小提醒：由於瀏覽器安全限制，若目前頁面尚未進入遊戲，需要先手動導向遊戲頁面後再點一次書籤。</p>
-
-    <h2>⚠️ 部署前檢查</h2>
-    <ol>
-        <li>把 <code>geo-mod.js</code> 上傳到你的 GitHub Pages（或其他有正確 CORS 的靜態空間），路徑對應上面①填的網址。</li>
-        <li>之後每次更新修改器版本，<b>直接覆蓋同一個檔名上傳</b>即可，書籤網址不用重建（時間戳參數已處理快取問題）。</li>
-        <li>此檔會直接讀寫 <code>player</code>/存檔，仍是「單機瀏覽器端」操作，跟 F12 貼上等效，只是入口換成書籤。</li>
-    </ol>
+    <div class="hint">找不到書籤列？先按 <b>Ctrl+Shift+B</b>顯示書籤列，再把上面按鈕拖過去。</div>
 </div>
-
-<script>
-function buildBookmarklet(url) {
-    var safe = url.trim().replace(/'/g, "%27");
-    var code = "(function(){"
-        + "var o=document.getElementById('geo-mod-loader');if(o)o.remove();"
-        + "var s=document.createElement('script');s.id='geo-mod-loader';"
-        + "s.src='" + safe + "?t='+Date.now();"
-        + "document.body.appendChild(s);"
-        + "})();";
-    return "javascript:" + code;
-}
-function refresh() {
-    var url = document.getElementById('host-input').value || '';
-    var href = buildBookmarklet(url);
-    document.getElementById('bkmk-link').setAttribute('href', href);
-    document.getElementById('code-box').value = href;
-}
-document.getElementById('host-input').addEventListener('input', refresh);
-document.getElementById('copy-btn').addEventListener('click', function () {
-    var box = document.getElementById('code-box');
-    box.select(); box.setSelectionRange(0, 99999);
-    try {
-        navigator.clipboard.writeText(box.value).then(function () {
-            var st = document.getElementById('copy-status');
-            st.textContent = '已複製！';
-            setTimeout(function () { st.textContent = ''; }, 2000);
-        });
-    } catch (e) {
-        document.execCommand('copy');
-    }
-});
-refresh();
-</script>
 </body>
 </html>
