@@ -352,6 +352,7 @@
                 // BOSS 房 / 軍王之室不加速（維持遊戲節奏與鑰匙機制）
                 if (typeof KING_ROOMS !== 'undefined' && KING_ROOMS[mapState.current]) return;
                 if (typeof PURE_BOSS_MAPS !== 'undefined' && PURE_BOSS_MAPS.indexOf && PURE_BOSS_MAPS.indexOf(mapState.current) >= 0) return;
+                if (typeof mapState.current === 'string' && mapState.current.indexOf('siege_v2_') === 0) return;   // 🏰 攻城v2：波次/BOSS獨佔位自有節奏，不套用加速
                 const now = (typeof state !== 'undefined' && state) ? state.ticks : null;
                 if (now == null) return;
                 for (let i = 0; i < mapState.spawnAt.length; i++) {
@@ -721,7 +722,7 @@
 
     // ===== 已穿戴裝備：欄位定義、值轉換、選單建構 =====
     const SLOT_DEFS = [
-        ['wpn','武器'],['helm','頭盔'],['armor','盔甲'],['shield','盾牌'],['cloak','斗篷'],
+        ['wpn','武器'],['offwpn','副手武器'],['helm','頭盔'],['armor','盔甲'],['shield','盾牌'],['cloak','斗篷'],
         ['tshirt','內衣'],['gloves','手套'],['boots','長靴'],['ring1','戒指1'],['ring2','戒指2'],
         ['ring3','戒指3'],['ring4','戒指4'],['amulet','項鍊'],['belt','腰帶'],['ear1','耳環1'],['ear2','耳環2'],['pet','寵物裝備'],['doll','魔法娃娃'],['arrow','箭矢']
     ];
@@ -1423,6 +1424,7 @@
         Object.entries(DB.items).forEach(([id, v]) => {
             let match = false;
             if (slot === 'wpn')        match = (v.type === 'wpn' && !v.isArrow);
+            else if (slot === 'offwpn') match = (v.type === 'wpn' && !v.isArrow);   // ⚔️ 副手武器（戰士迅猛雙斧雙持）：與主手同池，非防具
             else if (slot === 'arrow') match = (v.type === 'wpn' && v.isArrow === true);
             else if (slot === 'ring1' || slot === 'ring2' || slot === 'ring3' || slot === 'ring4') match = (v.type === 'acc' && v.slot === 'ring');
             else if (slot === 'amulet') match = (v.type === 'acc' && v.slot === 'amulet');
